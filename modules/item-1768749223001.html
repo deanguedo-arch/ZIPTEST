@@ -11,13 +11,15 @@
     .custom-scroll::-webkit-scrollbar-track { background: #1e293b; }
     .custom-scroll::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
     .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(10px); }
+    .material-card { transition: all 0.2s; }
+    .material-card:hover { transform: translateY(-2px); box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
     
   </style>
 </head>
 <body class="min-h-screen text-white custom-scroll">
   <header class="sticky top-0 z-50 bg-slate-900/95 backdrop-blur border-b border-slate-800">
     <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-      <a href="./index.html" class="flex items-center gap-2 text-slate-400 hover:text-sky-400 transition-colors text-sm font-bold">
+      <a href="../index.html" class="flex items-center gap-2 text-slate-400 hover:text-sky-400 transition-colors text-sm font-bold">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
         </svg>
@@ -28,42 +30,51 @@
   </header>
   
   <main class="max-w-6xl mx-auto px-6 py-8">
-    <div id="view-materials" class="w-full h-full custom-scroll p-8 md:p-12">
-                                <div class="max-w-5xl mx-auto space-y-8">
-                                  <div class="mb-12">
-                                    <h2 class="text-3xl font-black text-white italic uppercase tracking-tighter">Course <span class="text-sky-500">Materials</span></h2>
-                                    <p class="text-xs text-slate-400 font-mono uppercase tracking-widest mt-2">Access lectures, presentations, and briefing documents.</p>
-                                  </div>
-                                  <div id="pdf-viewer-container" class="hidden mb-12 bg-black rounded-xl border border-slate-700 overflow-hidden shadow-2xl">
-                                    <div class="flex justify-between items-center p-3 bg-slate-800 border-b border-slate-700">
-                                      <span id="viewer-title" class="text-xs font-bold text-white uppercase tracking-widest px-2">Document Viewer</span>
-                                      <button onclick="closeViewer()" class="text-xs text-rose-400 hover:text-white font-bold uppercase tracking-widest px-2">Close X</button>
-                                    </div>
-                                    <iframe id="pdf-frame" src="" width="100%" height="600" style="border:none;"></iframe>
-                                  </div>
-                                  <div class="grid grid-cols-1 gap-4" id="materials-container">
-                                    <p class="text-center text-slate-500 italic py-8">No materials yet. Add materials in the builder.</p>
-                                  </div>
-                                </div>
-                              </div>
+    
+        <div class="space-y-8">
+          <div class="mb-8">
+            <h2 class="text-3xl font-black text-white italic uppercase tracking-tighter">Course <span class="text-sky-500">Materials</span></h2>
+            <p class="text-xs text-slate-400 font-mono uppercase tracking-widest mt-2">Access lectures, presentations, and briefing documents.</p>
+          </div>
+          <div id="pdf-viewer-container" class="hidden mb-8 bg-black rounded-xl border border-slate-700 overflow-hidden shadow-2xl">
+            <div class="flex justify-between items-center p-3 bg-slate-800 border-b border-slate-700">
+              <span id="viewer-title" class="text-xs font-bold text-white uppercase tracking-widest px-2">Document Viewer</span>
+              <button onclick="closeViewer()" class="text-xs text-rose-400 hover:text-white font-bold uppercase tracking-widest px-2">Close X</button>
+            </div>
+            <iframe id="pdf-frame" src="" width="100%" height="600" style="border:none;"></iframe>
+          </div>
+          <div class="grid grid-cols-1 gap-4">
+            <div class="material-card flex flex-col md:flex-row items-center justify-between gap-6 p-6 bg-slate-900/80 rounded-xl border border-slate-700 ">
+          <div class="flex items-center gap-6">
+            <div class="w-12 h-12 rounded-lg bg-slate-800 flex items-center justify-center text-slate-500 font-black italic text-xl border border-slate-700">00</div>
+            <div>
+              <h3 class="text-lg font-bold text-white uppercase italic">FDSF</h3>
+              <p class="text-xs text-slate-400 font-mono"></p>
+            </div>
+          </div>
+          <div class="flex gap-3 w-full md:w-auto"></div>
+        </div>
+          </div>
+        </div>
   </main>
 
   
   
   <script>
     
-    function renderMaterials() {
-                                const container = document.getElementById('materials-container');
-                                if (!container) return;
-                                if (window.courseMaterials && window.courseMaterials.length > 0) {
-                                  container.innerHTML = window.courseMaterials.map(mat => `<div class="material-card">${mat.title}</div>`).join('');
-                                }
-                              }
-                              if (document.readyState === 'loading') {
-                                document.addEventListener('DOMContentLoaded', renderMaterials);
-                              } else {
-                                renderMaterials();
-                              }
+    
+        function openPDF(url, title) {
+          var container = document.getElementById('pdf-viewer-container');
+          var previewUrl = url.replace('/view', '/preview');
+          document.getElementById('pdf-frame').src = previewUrl;
+          document.getElementById('viewer-title').innerText = "VIEWING: " + title;
+          container.classList.remove('hidden');
+          container.scrollIntoView({ behavior: 'smooth' });
+        }
+        function closeViewer() {
+          document.getElementById('pdf-viewer-container').classList.add('hidden');
+          document.getElementById('pdf-frame').src = "";
+        }
   </script>
 </body>
 </html>
