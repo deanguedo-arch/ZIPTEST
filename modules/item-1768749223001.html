@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en" style="background: #0f172a !important; background-color: #0f172a !important;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Course Materials | Mental Fitness</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css?family=Inter:ital,wght@0,400;0,700;1,400;1,900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      background: #0f172a !important;
+      background-color: #0f172a !important;
+      font-family: 'Inter', sans-serif;
+    }
+    body {
+      min-height: 100vh;
+    }
+    .custom-scroll::-webkit-scrollbar { width: 6px; }
+    .custom-scroll::-webkit-scrollbar-track { background: #1e293b; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
+    .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(10px); }
+    .material-card { transition: all 0.2s; }
+    .material-card:hover { transform: translateY(-2px); box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
+    .assessment-container [class*="bg-slate-9"],
+    .assessment-container [class*="bg-slate-8"],
+    .assessment-container [class*="bg-slate-7"],
+    .assessment-container [class*="bg-slate-6"],
+    .assessment-container [class*="bg-gray-9"],
+    .assessment-container [class*="bg-gray-8"],
+    .assessment-container [class*="bg-gray-7"] {
+      background: var(--cf-container-bg) !important;
+    }
+    :root { --cf-container-bg: rgba(15, 23, 42, 0.8); }
+    
+    
+  </style>
+  <script>
+    (function() {
+      function setBackground() {
+        document.documentElement.style.backgroundColor = '#0f172a';
+        document.documentElement.style.background = '#0f172a';
+        document.body.style.backgroundColor = '#0f172a';
+        document.body.style.background = '#0f172a';
+      }
+      setBackground();
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setBackground);
+      }
+      setTimeout(setBackground, 100);
+      setTimeout(setBackground, 500);
+    })();
+  </script>
+</head>
+<body class="text-white custom-scroll" style="background: #0f172a !important; background-color: #0f172a !important;">
+  <header class="sticky top-0 z-50 bg-slate-900/95 backdrop-blur border-b border-slate-700">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="../index.html" class="flex items-center gap-2 text-slate-400 hover:text-sky-400 transition-colors text-sm font-bold">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+        Back to Course
+      </a>
+      <h1 class="text-sm font-bold text-white uppercase tracking-wider">Course Materials</h1>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-8">
+    
+      <div class="space-y-8">
+        <div class="mb-8">
+          <h2 class="text-3xl font-black text-white italic uppercase tracking-tighter">Course Materials</h2>
+          <p class="text-xs text-slate-400 font-mono uppercase tracking-widest mt-2">Access lectures, presentations, and briefing documents.</p>
+        </div>
+        <div id="pdf-viewer-container" class="hidden mb-8 bg-black rounded-xl border border-slate-700 overflow-hidden shadow-2xl">
+          <div class="flex justify-between items-center p-3 bg-slate-800 border-b border-slate-700">
+            <span id="viewer-title" class="text-xs font-bold text-white uppercase tracking-widest px-2">Document Viewer</span>
+            <button onclick="closeViewer()" class="text-xs text-rose-400 hover:text-white font-bold uppercase tracking-widest px-2">Close X</button>
+          </div>
+          <iframe id="pdf-frame" src="" width="100%" height="600" style="border:none;"></iframe>
+        </div>
+        <div id="digital-reader-container" class="hidden mb-8 bg-slate-900 rounded-xl border border-emerald-500/30 overflow-hidden shadow-2xl">
+          <div class="flex justify-between items-center p-3 bg-slate-800 border-b border-emerald-500/30">
+            <span id="reader-title" class="text-xs font-bold text-emerald-400 uppercase tracking-widest px-2 flex items-center gap-2">Digital Resource</span>
+            <button onclick="closeDigitalReader()" class="text-xs text-rose-400 hover:text-white font-bold uppercase tracking-widest px-2">Close X</button>
+          </div>
+          <div class="flex" style="height: 600px;">
+            <div id="reader-toc" class="w-64 bg-slate-950 border-r border-slate-700 p-4 overflow-y-auto hidden md:block">
+              <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Contents</h4>
+              <div id="reader-toc-items" class="space-y-1"></div>
+            </div>
+            <div id="reader-content" class="flex-1 p-6 md:p-8 overflow-y-auto">
+              <div id="reader-body" class="prose prose-invert max-w-none"></div>
+              <div class="flex justify-between items-center mt-8 pt-4 border-t border-slate-700">
+                <button id="prev-btn" onclick="prevChapter()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold uppercase rounded-lg transition-all disabled:opacity-30">Previous</button>
+                <span id="reader-progress" class="text-xs text-slate-400"></span>
+                <button id="next-btn" onclick="nextChapter()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold uppercase rounded-lg transition-all disabled:opacity-30">Next</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="materials-list" class="grid grid-cols-1 gap-4">
+          <p class="text-center text-slate-400 italic py-8">No materials available.</p>
+        </div>
+      </div>
+  </main>
+
+  <div id="tool-calculator" class="hidden fixed bottom-4 right-4 bg-slate-800 border border-slate-700 rounded-xl p-4 shadow-2xl z-50">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-sm font-bold text-white">Calculator</h3>
+              <button onclick="toggleTool('calculator')" class="text-slate-400 hover:text-white">&times;</button>
+            </div>
+            <input id="calc-display" type="text" readonly class="w-full mb-2 p-2 bg-slate-900 border border-slate-700 rounded text-right text-white" value="0">
+            <div class="grid grid-cols-4 gap-2">
+              <button onclick="calcInput('7')" class="p-2 bg-slate-700 hover:bg-slate-600 rounded text-white">7</button>
+              <button onclick="calcInput('8')" class="p-2 bg-slate-700 hover:bg-slate-600 rounded text-white">8</button>
+              <button onclick="calcInput('9')" class="p-2 bg-slate-700 hover:bg-slate-600 rounded text-white">9</button>
+              <button onclick="calcInput('/')" class="p-2 bg-blue-600 hover:bg-blue-500 rounded text-white">/</button>
+              <button onclick="calcInput('4')" class="p-2 bg-slate-700 hover:bg-slate-600 rounded text-white">4</button>
+              <button onclick="calcInput('5')" class="p-2 bg-slate-700 hover:bg-slate-600 rounded text-white">5</button>
+              <button onclick="calcInput('6')" class="p-2 bg-slate-700 hover:bg-slate-600 rounded text-white">6</button>
+              <button onclick="calcInput('*')" class="p-2 bg-blue-600 hover:bg-blue-500 rounded text-white">Ã—</button>
+              <button onclick="calcInput('1')" class="p-2 bg-slate-700 hover:bg-slate-600 rounded text-white">1</button>
+              <button onclick="calcInput('2')" class="p-2 bg-slate-700 hover:bg-slate-600 rounded text-white">2</button>
+              <button onclick="calcInput('3')" class="p-2 bg-slate-700 hover:bg-slate-600 rounded text-white">3</button>
+              <button onclick="calcInput('-')" class="p-2 bg-blue-600 hover:bg-blue-500 rounded text-white">âˆ’</button>
+              <button onclick="calcInput('0')" class="p-2 bg-slate-700 hover:bg-slate-600 rounded text-white">0</button>
+              <button onclick="calcInput('.')" class="p-2 bg-slate-700 hover:bg-slate-600 rounded text-white">.</button>
+              <button onclick="calcEquals()" class="p-2 bg-emerald-600 hover:bg-emerald-500 rounded text-white">=</button>
+              <button onclick="calcInput('+')" class="p-2 bg-blue-600 hover:bg-blue-500 rounded text-white">+</button>
+              <button onclick="calcClear()" class="col-span-4 p-2 bg-rose-600 hover:bg-rose-500 rounded text-white">Clear</button>
+            </div>
+          </div>
+<div id="tool-timer" class="hidden fixed bottom-4 left-4 bg-slate-800 border border-slate-700 rounded-xl p-4 shadow-2xl z-50 w-64">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-sm font-bold text-white">Timer</h3>
+              <button onclick="toggleTool('timer')" class="text-slate-400 hover:text-white">&times;</button>
+            </div>
+            <div id="timer-display" class="text-4xl font-bold text-center text-white mb-3">05:00</div>
+            <div class="flex gap-2">
+              <button onclick="startTimer()" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white py-2 rounded">Start</button>
+              <button onclick="pauseTimer()" class="flex-1 bg-amber-600 hover:bg-amber-500 text-white py-2 rounded">Pause</button>
+              <button onclick="resetTimer()" class="flex-1 bg-rose-600 hover:bg-rose-500 text-white py-2 rounded">Reset</button>
+            </div>
+          </div>
+
+
+  <script>
+    (function(){
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.body.style.background = '#020617';
+          })();
+let calcValue = '0';
+          function calcInput(val) {
+            if (calcValue === '0') calcValue = val;
+            else calcValue += val;
+            document.getElementById('calc-display').value = calcValue;
+          }
+          function calcEquals() {
+            try {
+              calcValue = eval(calcValue).toString();
+              document.getElementById('calc-display').value = calcValue;
+            } catch(e) { calcValue = 'Error'; }
+          }
+          function calcClear() {
+            calcValue = '0';
+            document.getElementById('calc-display').value = calcValue;
+          }
+let timerSeconds = 300;
+          let timerInterval = null;
+          function startTimer() {
+            if (timerInterval) return;
+            timerInterval = setInterval(() => {
+              if (timerSeconds > 0) {
+                timerSeconds--;
+                const mins = Math.floor(timerSeconds / 60);
+                const secs = timerSeconds % 60;
+                document.getElementById('timer-display').textContent = mins.toString().padStart(2,'0') + ':' + secs.toString().padStart(2,'0');
+              } else {
+                clearInterval(timerInterval);
+                timerInterval = null;
+                alert('Timer finished!');
+              }
+            }, 1000);
+          }
+          function pauseTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+          }
+          function resetTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            timerSeconds = 300;
+            document.getElementById('timer-display').textContent = '05:00';
+          }
+
+    
+      function openPDF(url, title) {
+        var container = document.getElementById('pdf-viewer-container');
+        var previewUrl = url.replace('/view', '/preview');
+        document.getElementById('pdf-frame').src = previewUrl;
+        document.getElementById('viewer-title').innerText = "VIEWING: " + title;
+        container.classList.remove('hidden');
+        container.scrollIntoView({ behavior: 'smooth' });
+      }
+      function closeViewer() {
+        document.getElementById('pdf-viewer-container').classList.add('hidden');
+        document.getElementById('pdf-frame').src = "";
+      }
+      
+    
+(function() {
+  var MODULE_KEY = 'CF_Module_Course_Materials_v1';
+  var saveTimeout = null;
+  function getAllInputState() {
+    var state = {};
+    document.querySelectorAll('input, textarea, select').forEach(function(el, i) {
+      var key = el.id || el.name || ('field_' + i);
+      if (el.type === 'checkbox' || el.type === 'radio') {
+        if (el.checked) state[key] = el.type === 'radio' ? el.value : true;
+      } else {
+        if (el.value) state[key] = el.value;
+      }
+    });
+    return state;
+  }
+  function restoreInputState(state) {
+    if (!state || typeof state !== 'object') return;
+    document.querySelectorAll('input, textarea, select').forEach(function(el, i) {
+      var key = el.id || el.name || ('field_' + i);
+      var savedValue = state[key];
+      if (savedValue !== undefined) {
+        if (el.type === 'checkbox') {
+          el.checked = !!savedValue;
+        } else if (el.type === 'radio') {
+          el.checked = (el.value === savedValue);
+        } else {
+          el.value = savedValue;
+        }
+      }
+    });
+  }
+  function saveNow() {
+    try {
+      var state = getAllInputState();
+      if (Object.keys(state).length > 0) {
+        localStorage.setItem(MODULE_KEY, JSON.stringify({
+          timestamp: Date.now(),
+          state: state
+        }));
+      }
+    } catch (e) {}
+  }
+  function debouncedSave() {
+    clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(saveNow, 800);
+  }
+  function loadSaved() {
+    try {
+      var raw = localStorage.getItem(MODULE_KEY);
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (parsed && parsed.state) restoreInputState(parsed.state);
+      }
+    } catch (e) {}
+  }
+  function init() {
+    loadSaved();
+    document.addEventListener('input', debouncedSave);
+    document.addEventListener('change', debouncedSave);
+    window.addEventListener('pagehide', saveNow);
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+  </script>
+</body>
+</html>
