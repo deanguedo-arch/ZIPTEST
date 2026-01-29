@@ -6138,12 +6138,12 @@
                           ? getPdfEmbedUrl(url)
                           : (function(u) {
                               if (!u) return u;
-                              if (u.indexOf('docs.google.com/gview') !== -1) return u;
+                              if (u.indexOf('docs.google.com/viewer') !== -1) return u;
                               var isDrive = u.indexOf('drive.google.com') !== -1;
                               var isIframe = false;
                               try { isIframe = window.self !== window.top; } catch (e) { isIframe = true; }
                               if (isIframe && !isDrive) {
-                                return 'https://docs.google.com/gview?embedded=1&url=' + encodeURIComponent(u);
+                                return 'https://docs.google.com/viewer?embedded=true&url=' + encodeURIComponent(u);
                               }
                               if (isDrive && u.indexOf('/view') !== -1) {
                                 return u.replace('/view', '/preview');
@@ -6652,12 +6652,12 @@
 
         function getPdfEmbedUrl(url) {
             if (!url) return url;
-            if (url.indexOf('docs.google.com/gview') !== -1) return url;
+            if (url.indexOf('docs.google.com/viewer') !== -1) return url;
             var isDrive = url.indexOf('drive.google.com') !== -1;
             var isIframe = false;
             try { isIframe = window.self !== window.top; } catch (e) { isIframe = true; }
             if (isIframe && !isDrive) {
-                return 'https://docs.google.com/gview?embedded=1&url=' + encodeURIComponent(url);
+                return 'https://docs.google.com/viewer?embedded=true&url=' + encodeURIComponent(url);
             }
             if (isDrive && url.indexOf('/view') !== -1) {
                 return url.replace('/view', '/preview');
