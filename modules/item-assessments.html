@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" style="background: #f8fafc !important; background-color: #f8fafc !important;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assessments | CALM 10 - Career and Life Managment</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      background: #f8fafc !important;
+      background-color: #f8fafc !important;
+      font-family: 'Montserrat', sans-serif;
+    }
+    body {
+      min-height: 100vh;
+    }
+    .custom-scroll::-webkit-scrollbar { width: 6px; }
+    .custom-scroll::-webkit-scrollbar-track { background: #e2e8f0; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 3px; }
+    .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
+    .material-card { transition: all 0.2s; }
+    .material-card:hover { transform: translateY(-2px); box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
+    .assessment-container [class*="bg-slate-9"],
+    .assessment-container [class*="bg-slate-8"],
+    .assessment-container [class*="bg-slate-7"],
+    .assessment-container [class*="bg-slate-6"],
+    .assessment-container [class*="bg-gray-9"],
+    .assessment-container [class*="bg-gray-8"],
+    .assessment-container [class*="bg-gray-7"] {
+      background: var(--cf-container-bg) !important;
+    }
+    :root { --cf-container-bg: rgba(255, 255, 255, 0.9); }
+    
+    
+  </style>
+  <script>
+    (function() {
+      function setBackground() {
+        document.documentElement.style.backgroundColor = '#f8fafc';
+        document.documentElement.style.background = '#f8fafc';
+        if (document.body) {
+          document.body.style.backgroundColor = '#f8fafc';
+          document.body.style.background = '#f8fafc';
+        }
+      }
+      setBackground();
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setBackground);
+      }
+      setTimeout(setBackground, 100);
+      setTimeout(setBackground, 500);
+    })();
+  </script>
+</head>
+<body class="text-slate-900 custom-scroll" style="background: #f8fafc !important; background-color: #f8fafc !important;">
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-300">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="../index.html" class="flex items-center gap-2 text-slate-600 hover:text-indigo-400 transition-colors text-sm font-bold">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+        Back to Course
+      </a>
+      <h1 class="text-sm font-bold text-slate-900 uppercase tracking-wider">Assessments</h1>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-8">
+    
+      <div class="space-y-8">
+        
+        <div class="mb-8">
+          <h2 class="text-3xl font-black text-slate-900 italic uppercase tracking-tighter">Assessment Center</h2>
+          <p class="text-xs text-slate-600 font-mono uppercase tracking-widest mt-2">Quizzes, tests, and reflection exercises.</p>
+        </div>
+        <div id="assessment-list" class="grid grid-cols-1 gap-4">
+          <p class="text-center text-slate-600 italic py-8">No assessments available.</p>
+        </div>
+        
+      </div>
+  </main>
+
+  
+
+  <script>
+    window.CF_ASSET_BASE_URL = "";
+    
+    
+      function showAssessment(index) {
+        document.getElementById('assessment-list').classList.add('hidden');
+        document.querySelectorAll('.assessment-container').forEach(function(c) { c.classList.add('hidden'); });
+        var target = document.getElementById('assessment-' + index);
+        if (target) target.classList.remove('hidden');
+        window.scrollTo(0, 0);
+      }
+      function backToAssessmentList() {
+        document.querySelectorAll('.assessment-container').forEach(function(c) { c.classList.add('hidden'); });
+        document.getElementById('assessment-list').classList.remove('hidden');
+        window.scrollTo(0, 0);
+      }
+      
+    
+(function() {
+  var MODULE_KEY = 'CF_Module_Assessments_v1';
+  var saveTimeout = null;
+  function getAllInputState() {
+    var state = {};
+    document.querySelectorAll('input, textarea, select').forEach(function(el, i) {
+      var key = el.id || el.name || ('field_' + i);
+      if (el.type === 'checkbox' || el.type === 'radio') {
+        if (el.checked) state[key] = el.type === 'radio' ? el.value : true;
+      } else {
+        if (el.value) state[key] = el.value;
+      }
+    });
+    return state;
+  }
+  function restoreInputState(state) {
+    if (!state || typeof state !== 'object') return;
+    document.querySelectorAll('input, textarea, select').forEach(function(el, i) {
+      var key = el.id || el.name || ('field_' + i);
+      var savedValue = state[key];
+      if (savedValue !== undefined) {
+        if (el.type === 'checkbox') {
+          el.checked = !!savedValue;
+        } else if (el.type === 'radio') {
+          el.checked = (el.value === savedValue);
+        } else {
+          el.value = savedValue;
+        }
+      }
+    });
+  }
+  function saveNow() {
+    try {
+      var state = getAllInputState();
+      if (Object.keys(state).length > 0) {
+        localStorage.setItem(MODULE_KEY, JSON.stringify({
+          timestamp: Date.now(),
+          state: state
+        }));
+      }
+    } catch (e) {}
+  }
+  function debouncedSave() {
+    clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(saveNow, 800);
+  }
+  function loadSaved() {
+    try {
+      var raw = localStorage.getItem(MODULE_KEY);
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (parsed && parsed.state) restoreInputState(parsed.state);
+      }
+    } catch (e) {}
+  }
+  function init() {
+    loadSaved();
+    document.addEventListener('input', debouncedSave);
+    document.addEventListener('change', debouncedSave);
+    window.addEventListener('pagehide', saveNow);
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+  </script>
+</body>
+</html>

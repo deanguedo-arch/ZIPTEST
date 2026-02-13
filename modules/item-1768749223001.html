@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en" style="background: #f8fafc !important; background-color: #f8fafc !important;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Course Materials | CALM 10 - Career and Life Managment</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      background: #f8fafc !important;
+      background-color: #f8fafc !important;
+      font-family: 'Montserrat', sans-serif;
+    }
+    body {
+      min-height: 100vh;
+    }
+    .custom-scroll::-webkit-scrollbar { width: 6px; }
+    .custom-scroll::-webkit-scrollbar-track { background: #e2e8f0; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 3px; }
+    .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
+    .material-card { transition: all 0.2s; }
+    .material-card:hover { transform: translateY(-2px); box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
+    .assessment-container [class*="bg-slate-9"],
+    .assessment-container [class*="bg-slate-8"],
+    .assessment-container [class*="bg-slate-7"],
+    .assessment-container [class*="bg-slate-6"],
+    .assessment-container [class*="bg-gray-9"],
+    .assessment-container [class*="bg-gray-8"],
+    .assessment-container [class*="bg-gray-7"] {
+      background: var(--cf-container-bg) !important;
+    }
+    :root { --cf-container-bg: rgba(255, 255, 255, 0.9); }
+    
+    
+  </style>
+  <script>
+    (function() {
+      function setBackground() {
+        document.documentElement.style.backgroundColor = '#f8fafc';
+        document.documentElement.style.background = '#f8fafc';
+        if (document.body) {
+          document.body.style.backgroundColor = '#f8fafc';
+          document.body.style.background = '#f8fafc';
+        }
+      }
+      setBackground();
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setBackground);
+      }
+      setTimeout(setBackground, 100);
+      setTimeout(setBackground, 500);
+    })();
+  </script>
+</head>
+<body class="text-slate-900 custom-scroll" style="background: #f8fafc !important; background-color: #f8fafc !important;">
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-300">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="../index.html" class="flex items-center gap-2 text-slate-600 hover:text-indigo-400 transition-colors text-sm font-bold">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+        Back to Course
+      </a>
+      <h1 class="text-sm font-bold text-slate-900 uppercase tracking-wider">Course Materials</h1>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-8">
+    
+      <div class="space-y-8">
+        <div class="mb-8">
+          <h2 class="text-3xl font-black text-slate-900 italic uppercase tracking-tighter">Course Materials</h2>
+          <p class="text-xs text-slate-600 font-mono uppercase tracking-widest mt-2">Access lectures, presentations, and briefing documents.</p>
+        </div>
+        <div id="pdf-viewer-container" class="hidden mb-8 bg-white rounded-xl border border-slate-300 overflow-hidden shadow-2xl">
+          <div class="flex justify-between items-center p-3 bg-slate-100 border-b border-slate-300">
+            <span id="viewer-title" class="text-xs font-bold text-white uppercase tracking-widest px-2">Document Viewer</span>
+            <button onclick="closeViewer()" class="text-xs text-rose-400 hover:text-slate-900 font-bold uppercase tracking-widest px-2">Close X</button>
+          </div>
+          <iframe id="pdf-frame" src="" width="100%" height="600" style="border:none;"></iframe>
+        </div>
+        <div id="digital-reader-container" class="hidden mb-8 bg-white rounded-xl border border-emerald-500/30 overflow-hidden shadow-2xl">
+          <div class="flex justify-between items-center p-3 bg-slate-100 border-b border-emerald-500/30">
+            <span id="reader-title" class="text-xs font-bold text-emerald-400 uppercase tracking-widest px-2 flex items-center gap-2">Digital Resource</span>
+            <button onclick="closeDigitalReader()" class="text-xs text-rose-400 hover:text-slate-900 font-bold uppercase tracking-widest px-2">Close X</button>
+          </div>
+          <div class="flex" style="height: 600px;">
+            <div id="reader-toc" class="w-64 bg-slate-50 border-r border-slate-300 p-4 overflow-y-auto hidden md:block">
+              <h4 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-4">Contents</h4>
+              <div id="reader-toc-items" class="space-y-1"></div>
+            </div>
+            <div id="reader-content" class="flex-1 p-6 md:p-8 overflow-y-auto">
+              <div id="reader-body" class="prose prose-slate max-w-none"></div>
+              <div class="flex justify-between items-center mt-8 pt-4 border-t border-slate-300">
+                <button id="prev-btn" onclick="prevChapter()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-900 text-xs font-bold uppercase rounded-lg transition-all disabled:opacity-30">Previous</button>
+                <span id="reader-progress" class="text-xs text-slate-600"></span>
+                <button id="next-btn" onclick="nextChapter()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold uppercase rounded-lg transition-all disabled:opacity-30">Next</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="materials-list" class="grid grid-cols-1 gap-4">
+          <div class="material-card flex flex-col md:flex-row items-center justify-between gap-6 p-6 bg-white rounded-xl border border-slate-300 ">
+        <div class="flex items-center gap-6">
+          <div class="w-12 h-12 rounded-lg bg-slate-800 flex items-center justify-center text-slate-800 font-black italic text-xl border border-slate-700"></div>
+          <div>
+            <h3 class="text-lg font-bold text-black uppercase italic">CALM Module 1 - Personal Choices</h3>
+            <p class="text-xs text-slate-800 font-mono"></p>
+          </div>
+        </div>
+        <div class="flex gap-3 w-full md:w-auto"><button onclick="openPDF('/Course-factoryPERFECT/materials/CALM/CALM Module 1 - Personal Choices.pdf', 'CALM Module 1 - Personal Choices')" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-slate-600 text-[10px] font-bold uppercase tracking-widest py-3 px-6 rounded-lg border border-slate-600 transition-all">View Slides</button><a href="/Course-factoryPERFECT/materials/CALM/CALM Module 1 - Personal Choices.pdf" target="_blank" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-slate-600 text-[10px] font-bold uppercase tracking-widest py-3 px-6 rounded-lg transition-all text-center flex items-center justify-center">Download</a></div>
+      </div>
+        </div>
+      </div>
+  </main>
+
+  
+
+  <script>
+    window.CF_ASSET_BASE_URL = "";
+    
+    
+      function isGoogleSitesHost() {
+        var ref = '';
+        try { ref = document.referrer || ''; } catch (e) { ref = ''; }
+        if (/sites\.google\.com/i.test(ref)) return true;
+        try { return /sites\.google\.com/i.test(window.top.location.host || ''); } catch (e) { return /sites\.google\.com/i.test(ref); }
+      }
+      function getPdfEmbedUrl(url) {
+        if (!url) return url;
+        var clean = String(url).trim();
+        if (!clean) return clean;
+        if (clean.indexOf('docs.google.com/viewer') !== -1) return clean;
+        var isDrive = clean.indexOf('drive.google.com') !== -1;
+        if (isDrive) {
+          var driveIdMatch = clean.match(/\/file\/d\/([a-zA-Z0-9_-]+)/i) || clean.match(/[?&]id=([a-zA-Z0-9_-]+)/i);
+          if (driveIdMatch && driveIdMatch[1]) {
+            return 'https://drive.google.com/file/d/' + driveIdMatch[1] + '/preview';
+          }
+          if (clean.indexOf('/view') !== -1) {
+            return clean.replace('/view', '/preview');
+          }
+          return clean;
+        }
+        if (/^(\/|\.\/|\.\.\/|blob:|data:)/i.test(clean)) {
+          return clean;
+        }
+        var isSameOrigin = false;
+        try {
+          var parsed = new URL(clean, window.location.href);
+          isSameOrigin = parsed.origin === window.location.origin;
+        } catch (e) {
+          isSameOrigin = false;
+        }
+        if (isSameOrigin) {
+          return clean;
+        }
+        var forceViewer = isGoogleSitesHost() || window.CF_FORCE_PDF_VIEWER === true;
+        if (forceViewer && /^https?:\/\//i.test(clean)) {
+          return 'https://docs.google.com/viewer?embedded=true&url=' + encodeURIComponent(clean);
+        }
+        return clean;
+      }
+      function openPDF(url, title) {
+        var container = document.getElementById('pdf-viewer-container');
+        var previewUrl = getPdfEmbedUrl(url);
+        document.getElementById('pdf-frame').src = previewUrl || '';
+        document.getElementById('viewer-title').innerText = "VIEWING: " + title;
+        container.classList.remove('hidden');
+        container.scrollIntoView({ behavior: 'smooth' });
+      }
+      function closeViewer() {
+        document.getElementById('pdf-viewer-container').classList.add('hidden');
+        document.getElementById('pdf-frame').src = "";
+      }
+      
+    
+(function() {
+  var MODULE_KEY = 'CF_Module_Course_Materials_v1';
+  var saveTimeout = null;
+  function getAllInputState() {
+    var state = {};
+    document.querySelectorAll('input, textarea, select').forEach(function(el, i) {
+      var key = el.id || el.name || ('field_' + i);
+      if (el.type === 'checkbox' || el.type === 'radio') {
+        if (el.checked) state[key] = el.type === 'radio' ? el.value : true;
+      } else {
+        if (el.value) state[key] = el.value;
+      }
+    });
+    return state;
+  }
+  function restoreInputState(state) {
+    if (!state || typeof state !== 'object') return;
+    document.querySelectorAll('input, textarea, select').forEach(function(el, i) {
+      var key = el.id || el.name || ('field_' + i);
+      var savedValue = state[key];
+      if (savedValue !== undefined) {
+        if (el.type === 'checkbox') {
+          el.checked = !!savedValue;
+        } else if (el.type === 'radio') {
+          el.checked = (el.value === savedValue);
+        } else {
+          el.value = savedValue;
+        }
+      }
+    });
+  }
+  function saveNow() {
+    try {
+      var state = getAllInputState();
+      if (Object.keys(state).length > 0) {
+        localStorage.setItem(MODULE_KEY, JSON.stringify({
+          timestamp: Date.now(),
+          state: state
+        }));
+      }
+    } catch (e) {}
+  }
+  function debouncedSave() {
+    clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(saveNow, 800);
+  }
+  function loadSaved() {
+    try {
+      var raw = localStorage.getItem(MODULE_KEY);
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (parsed && parsed.state) restoreInputState(parsed.state);
+      }
+    } catch (e) {}
+  }
+  function init() {
+    loadSaved();
+    document.addEventListener('input', debouncedSave);
+    document.addEventListener('change', debouncedSave);
+    window.addEventListener('pagehide', saveNow);
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+  </script>
+</body>
+</html>
